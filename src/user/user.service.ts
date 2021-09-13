@@ -1,5 +1,5 @@
 import { UserCreationRequestBuilder } from './model/builder/user.creation.request.builder';
-import { UserBuilder } from './model/user.builder';
+import { UserBuilder } from './model/builder/user.builder';
 import { User } from './model/entity/user.entity';
 import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
