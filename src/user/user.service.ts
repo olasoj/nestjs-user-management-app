@@ -5,8 +5,10 @@ import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { UserCreationRequest } from "./model/request/user.creation.request";
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserPaginateRequest } from './model/request/pagination/user.pagination.request'
 
 import initData from './init/user_init.data';
+import { UserPageRequest } from './model/request/pagination/user.page request';
 
 
 @Injectable()
@@ -14,16 +16,29 @@ export class UserService {
 
     constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-    async getAllUsersBt(): Promise<User[]> {
-        const query = this.userRepository.createQueryBuilder("user");
-        query.where("user._id = :_id", { _id: "012c8081-6d90-4baf-8633-ad07a63447d2" });
+    async getAllUsersBt(userPaginateRequest: UserPaginateRequest): Promise<User[]> {
+        const queryBuilder = this.getQueryBuilder();
 
-        const user = await query.getMany();
-        console.log(user)
-        return user;
+        const resolvedUserPaginationRequest = this.resolveUserPaginationRequest(userPaginateRequest)
+
+        console.log(resolvedUserPaginationRequest)
+
+        const { workCategory, interest } = resolvedUserPaginationRequest.userFilterRequest;
+
+        if (workCategory) queryBuilder.where("user._workCategory = :workCategory", { workCategory });
+        if (interest) queryBuilder.where("user._interest = :interest", { interest });
+
+
+        this.paginateUserResult(queryBuilder, resolvedUserPaginationRequest.userPageRequest);
+        const [users, total] = await queryBuilder.getManyAndCount();
+        return users;
     }
 
-
+    private paginateUserResult(queryBuilder, userPageRequest: UserPageRequest) {
+        const { pageNumber, pageSize } = userPageRequest;
+        queryBuilder.skip((pageNumber - 1) * pageSize);
+        queryBuilder.take(pageSize);
+    }
 
     async getUser(id: string) {
         const user = await this.userRepository.findOne({ where: { id: id } });
@@ -82,10 +97,18 @@ export class UserService {
         return this.userRepository.find();
     }
 
+    private getQueryBuilder() {
+        return this.userRepository.createQueryBuilder("user");
+    }
+
 
     async userTableIsEmpty() {
         if ((await this.getAllUsers()).length == 0) return true;
         return false;
+    }
+
+    private resolveUserPaginationRequest(userPaginateRequest: UserPaginateRequest) {
+        return (userPaginateRequest.userPageRequest === undefined || userPaginateRequest.userFilterRequest === null) ? new UserPaginateRequest() : userPaginateRequest;
     }
 
 }

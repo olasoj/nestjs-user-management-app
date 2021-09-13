@@ -12,15 +12,16 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forRoot({ autoLoadEntities: true }), UserModule],
   controllers: [AppController],
 
-  providers: [AppService, {
-    provide: APP_FILTER,
-    useClass: HttpErrorFilter
-  },
+  providers: [AppService,
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpErrorFilter
+    // },
 
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: LoggingInterceptor,
+    // },
   ]
 })
 

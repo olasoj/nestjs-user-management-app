@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { UserCreationRequest } from "./model/request/user.creation.request";
 import { User } from "./model/entity/user.entity";
+import { UserPaginateRequest } from './model/request/pagination/user.pagination.request'
 
 @Controller('/user')
 export class UserController {
@@ -14,9 +15,8 @@ export class UserController {
     }
 
     @Get('/')
-    async getUsers(@Body() userCreationRequest: UserCreationRequest): Promise<User[]> {
-        const users = await this.userService.getAllUsersBt();
-        console.log(users)
-        return users;
+    async getUsers(@Body() userPaginateRequest: UserPaginateRequest): Promise<User[]> {//Promise<[User[], number]> {
+        return await this.userService.getAllUsersBt(userPaginateRequest);
     }
+
 }
