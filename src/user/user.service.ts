@@ -9,6 +9,7 @@ import { UserPaginateRequest } from './model/request/pagination/user.pagination.
 
 import initData from './init/user_init.data';
 import { UserPageRequest } from './model/request/pagination/user.page request';
+import { UserFilterRequest } from './model/request/pagination/user.filter request';
 
 
 @Injectable()
@@ -19,19 +20,19 @@ export class UserService {
     async getAllUsersBt(userPaginateRequest: UserPaginateRequest): Promise<User[]> {
         const queryBuilder = this.getQueryBuilder();
 
-        const resolvedUserPaginationRequest = this.resolveUserPaginationRequest(userPaginateRequest)
+        const resolvedUserPaginationRequest = this.resolveUserPaginationRequest(userPaginateRequest);
 
-        console.log(resolvedUserPaginationRequest)
-
-        const { workCategory, interest } = resolvedUserPaginationRequest.userFilterRequest;
-
-        if (workCategory) queryBuilder.where("user._workCategory = :workCategory", { workCategory });
-        if (interest) queryBuilder.where("user._interest = :interest", { interest });
-
-
+        this.filterUserList(queryBuilder, resolvedUserPaginationRequest.userFilterRequest);
         this.paginateUserResult(queryBuilder, resolvedUserPaginationRequest.userPageRequest);
+
         const [users, total] = await queryBuilder.getManyAndCount();
         return users;
+    }
+
+    private filterUserList(queryBuilder, userFilterRequest: UserFilterRequest) {
+        const { workCategory, interest } = userFilterRequest;
+        if (workCategory) queryBuilder.where("user._workCategory = :workCategory", { workCategory });
+        if (interest) queryBuilder.where("user._interest = :interest", { interest });
     }
 
     private paginateUserResult(queryBuilder, userPageRequest: UserPageRequest) {
