@@ -1,5 +1,5 @@
 
-import { User } from "../entity/user.entity";
+import { User } from "../../entity/user.entity";
 
 export class UserBuilder {
     private readonly _user: User;

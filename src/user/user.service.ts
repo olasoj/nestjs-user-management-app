@@ -1,5 +1,5 @@
-import { UserCreationRequestBuilder } from './model/builder/user.creation.request.builder';
-import { UserBuilder } from './model/builder/user.builder';
+import { UserCreationRequestBuilder } from './model/builder/request/user.creation.request.builder';
+import { UserBuilder } from './model/builder/entity/user.builder';
 import { User } from './model/entity/user.entity';
 import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
@@ -19,7 +19,6 @@ export class UserService {
 
     async getAllUsersBt(userPaginateRequest: UserPaginateRequest): Promise<User[]> {
         const queryBuilder = this.getQueryBuilder();
-
         const resolvedUserPaginationRequest = this.resolveUserPaginationRequest(userPaginateRequest);
 
         this.filterUserList(queryBuilder, resolvedUserPaginationRequest.userFilterRequest);
@@ -31,6 +30,7 @@ export class UserService {
 
     private filterUserList(queryBuilder, userFilterRequest: UserFilterRequest) {
         const { workCategory, interest } = userFilterRequest;
+        console.log(workCategory)
         if (workCategory) queryBuilder.where("user._workCategory = :workCategory", { workCategory });
         if (interest) queryBuilder.where("user._interest = :interest", { interest });
     }
@@ -109,7 +109,8 @@ export class UserService {
     }
 
     private resolveUserPaginationRequest(userPaginateRequest: UserPaginateRequest) {
-        return (userPaginateRequest.userPageRequest === undefined || userPaginateRequest.userFilterRequest === null) ? new UserPaginateRequest() : userPaginateRequest;
+        return (userPaginateRequest.userPageRequest === undefined || userPaginateRequest.userPageRequest === null || userPaginateRequest.userFilterRequest === undefined)
+            ? new UserPaginateRequest() : userPaginateRequest;
     }
 
 }

@@ -1,4 +1,4 @@
-import { UserCreationRequest } from '../request/user.creation.request';
+import { UserCreationRequest } from "../../request/user.creation.request";
 
 
 export class UserCreationRequestBuilder {

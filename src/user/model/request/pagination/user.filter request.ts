@@ -1,12 +1,10 @@
 export class UserFilterRequest {
 
-    constructor() {
+    constructor() { }
 
-    }
+    private _workCategory: string = null;
 
-    private _workCategory: string;
-
-    private _interest: string;
+    private _interest: string = null;
 
     public get interest(): string {
         return this._interest;
