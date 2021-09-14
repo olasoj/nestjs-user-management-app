@@ -2,7 +2,7 @@ import { UserPaginationDetailsResponse } from "../../../response/pagination/user
 import { UserResponse } from "../../../response/user.response";
 
 
-export class UserResponseBuilder {
+export class UserPaginationResponseBuilder {
     private readonly _userPaginationDetailsResponse: UserPaginationDetailsResponse;
 
     constructor() {
@@ -10,29 +10,29 @@ export class UserResponseBuilder {
     }
 
 
-    public userResponse(userResponse: UserResponse): UserResponseBuilder {
-        this._userPaginationDetailsResponse.userResponse = userResponse;
+    public users(users: UserResponse[]): UserPaginationResponseBuilder {
+        this._userPaginationDetailsResponse.userResponse = users;
         return this;
     }
 
-    public totalPages(totalPages: number): UserResponseBuilder {
+    public totalPages(totalPages: number): UserPaginationResponseBuilder {
         this._userPaginationDetailsResponse.totalPages = totalPages;
         return this;
     }
 
 
-    public numberOfRecordsOnPage(numberOfRecordsOnPage: number): UserResponseBuilder {
+    public numberOfRecordsOnPage(numberOfRecordsOnPage: number): UserPaginationResponseBuilder {
         this._userPaginationDetailsResponse.numberOfRecordsOnPage = numberOfRecordsOnPage;
         return this;
     }
 
-    public pageSize(pageSize: number): UserResponseBuilder {
+    public pageSize(pageSize: number): UserPaginationResponseBuilder {
         this._userPaginationDetailsResponse.pageSize = pageSize;
         return this
     }
 
 
-    public pageNumber(pageNumber: number): UserResponseBuilder {
+    public pageNumber(pageNumber: number): UserPaginationResponseBuilder {
         this._userPaginationDetailsResponse.pageNumber = pageNumber;
         return this;
     }

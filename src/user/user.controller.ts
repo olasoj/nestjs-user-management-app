@@ -3,6 +3,7 @@ import { UserService } from "./user.service";
 import { UserCreationRequest } from "./model/request/user.creation.request";
 import { User } from "./model/entity/user.entity";
 import { UserPaginateRequest } from './model/request/pagination/user.pagination.request'
+import { UserPaginationDetailsResponse } from "./model/response/pagination/user.pagination.details.response";
 
 @Controller('/user')
 export class UserController {
@@ -15,8 +16,15 @@ export class UserController {
     }
 
     @Get('/')
-    async getUsers(@Body() userPaginateRequest: UserPaginateRequest): Promise<User[]> {//Promise<[User[], number]> {
-        return await this.userService.getAllUsersBt(userPaginateRequest);
+    async paginatedUsers(@Body() userPaginateRequest: UserPaginateRequest): Promise<UserPaginationDetailsResponse> {
+        return await this.userService.getPaginatedUsers(userPaginateRequest);
     }
+
+
+    @Get('/distinct-value')
+    async distinct(): Promise<any> {
+        return await this.userService.getUserDistinctValue();
+    }
+
 
 }

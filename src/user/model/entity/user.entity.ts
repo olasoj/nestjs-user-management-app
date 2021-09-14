@@ -23,7 +23,7 @@ export class User {
     private _username: string;
 
     @Column({ name: "years_of_experience", nullable: false })
-    private _yearsOfExperience: Number;
+    private _yearsOfExperience: number;
 
     @Column({ name: "interest", nullable: false })
     private _interest: string;
@@ -92,7 +92,7 @@ export class User {
     public get yearsOfExperience() {
         return this._yearsOfExperience;
     }
-    public set yearsOfExperience(yearsOfExperience: Number) {
+    public set yearsOfExperience(yearsOfExperience: number) {
         this._yearsOfExperience = yearsOfExperience;
     }
 

@@ -2,7 +2,7 @@ import { UserResponse } from "../user.response";
 
 export class UserPaginationDetailsResponse {
 
-    private _userResponse: UserResponse;
+    private _userResponse: UserResponse[];
 
     private _totalPages: number;
 
@@ -13,10 +13,10 @@ export class UserPaginationDetailsResponse {
     private _pageSize: number;
 
 
-    public get userResponse(): UserResponse {
+    public get userResponse(): UserResponse[] {
         return this._userResponse;
     }
-    public set userResponse(userResponse: UserResponse) {
+    public set userResponse(userResponse: UserResponse[]) {
         this._userResponse = userResponse;
     }
 
