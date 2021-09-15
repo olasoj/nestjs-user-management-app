@@ -8,6 +8,8 @@ export class UserPaginationDetailsResponse {
 
     private _numberOfRecordsOnPage: number;
 
+    private _totalNumberOfUser: number;
+
     private _pageNumber: number;
 
     private _pageSize: number;
@@ -32,6 +34,13 @@ export class UserPaginationDetailsResponse {
     }
     public set numberOfRecordsOnPage(numberOfRecordsOnPage: number) {
         this._numberOfRecordsOnPage = numberOfRecordsOnPage;
+    }
+
+    public get totalNumberOfUser(): number {
+        return this._totalNumberOfUser;
+    }
+    public set totalNumberOfUser(totalNumberOfUser: number) {
+        this._totalNumberOfUser = totalNumberOfUser;
     }
 
     public get pageSize(): number {

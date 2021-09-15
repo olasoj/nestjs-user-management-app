@@ -1,5 +1,7 @@
 export class UserResponse {
 
+    private _id: string
+
     private _email: string;
 
     private _fullName: string;
@@ -12,6 +14,13 @@ export class UserResponse {
 
     private _interest: string;
 
+
+    public get id(): string {
+        return this._id;
+    }
+    public set id(id: string) {
+        this._id = id;
+    }
 
     public get email(): string {
         return this._email;

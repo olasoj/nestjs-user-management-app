@@ -10,6 +10,11 @@ export class UserResponseBuilder {
     }
 
 
+    public id(id: string): UserResponseBuilder {
+        this._userResponse.id = id;
+        return this;
+    }
+
     public email(email: string): UserResponseBuilder {
         this._userResponse.email = email;
         return this;

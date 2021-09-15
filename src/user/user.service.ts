@@ -26,12 +26,14 @@ export class UserService {
 
         this.filterUserList(queryBuilder, userFilterRequest);
         this.paginateUserResult(queryBuilder, userPageRequest);
+        console.log(userPageRequest)
 
         const [users, totalUsers] = await queryBuilder.getManyAndCount();
         const userResponseDTO = this.getUserResponse(users);
 
         return new UserPaginationResponseBuilder()
-            .numberOfRecordsOnPage(userResponseDTO.length)
+            .totalNumberOfUser(totalUsers)
+            .totalUsersOnPage(userResponseDTO.length)
             .pageNumber(userPageRequest.pageNumber)
             .totalPages(Math.ceil(totalUsers / userPageRequest.pageSize))
             .pageSize(userPageRequest.pageSize)
@@ -42,10 +44,10 @@ export class UserService {
     async getUserDistinctValue(): Promise<any> {
         const queryBuilder = this.getQueryBuilder();
 
-        const distinctInterests = (await this.getDistinctInterest(queryBuilder)).map(distinctInterest => distinctInterest.interest);
-        const distinctWorkCategories = (await this.getDistinctWorkCategory(queryBuilder)).map(distinctWorkCategory => distinctWorkCategory.work_category);
+        const distinctInterests = await this.getDistinctInterest(queryBuilder)
+        const distinctWorkCategories = await this.getDistinctWorkCategory(queryBuilder)
 
-        return { distinctWorkCategories: [...distinctWorkCategories], distinctInterests: [...distinctInterests] };
+        return { distinctWorkCategories: [...(distinctWorkCategories)], distinctInterests: [...distinctInterests] };
     }
 
     async getUser(id: string) {
@@ -82,7 +84,7 @@ export class UserService {
         const { workCategory, interest } = userFilterRequest;
         console.log(workCategory)
         if (workCategory) queryBuilder.where("user._workCategory = :workCategory", { workCategory });
-        if (interest) queryBuilder.where("user._interest = :interest", { interest });
+        if (interest) queryBuilder.andWhere("user._interest = :interest", { interest });
     }
 
     private paginateUserResult(queryBuilder: SelectQueryBuilder<User>, userPageRequest: UserPageRequest) {
@@ -136,6 +138,7 @@ export class UserService {
 
     private getUserResponse(users: User[]) {
         return users.map(user => new UserResponseBuilder()
+            .id(user.id)
             .email(user.email)
             .fullName(user.fullName)
             .interest(user.interest)
@@ -146,17 +149,21 @@ export class UserService {
     }
 
     private async getDistinctWorkCategory(queryBuilder: SelectQueryBuilder<User>) {
-        return await queryBuilder
+        const distinctWorkCategory = await queryBuilder
             .select('work_category')
             .distinct(true)
             .getRawMany();
+
+        return distinctWorkCategory.map(distinctWorkCategory => distinctWorkCategory.work_category)
     }
 
     private async getDistinctInterest(queryBuilder: SelectQueryBuilder<User>) {
-        return await queryBuilder
+        const distinctInterest = await queryBuilder
             .select('interest')
             .distinct(true)
             .getRawMany();
+
+        return distinctInterest.map(distinctInterest => distinctInterest.interest);
     }
 
 }

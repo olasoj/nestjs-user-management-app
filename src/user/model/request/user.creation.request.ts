@@ -1,15 +1,29 @@
+import { IsEmail, IsNotEmpty, IsString, IsNumber, } from 'class-validator';
+
 export class UserCreationRequest {
 
+    @IsEmail()
+    @IsNotEmpty()
     private _email: string;
 
+    @IsNotEmpty()
+    @IsString()
     private _fullName: string;
 
+    @IsNotEmpty()
+    @IsString()
     private _username: string;
 
+    @IsNotEmpty()
+    @IsNumber()
     private _yearsOfExperience: number;
 
+    @IsNotEmpty()
+    @IsString()
     private _workCategory: string;
 
+    @IsNotEmpty()
+    @IsString()
     private _interest: string;
 
 

@@ -20,8 +20,13 @@ export class UserPaginationResponseBuilder {
         return this;
     }
 
+    public totalNumberOfUser(totalNumberOfUsers: number): UserPaginationResponseBuilder {
+        this._userPaginationDetailsResponse.totalNumberOfUser = totalNumberOfUsers;
+        return this;
+    }
 
-    public numberOfRecordsOnPage(numberOfRecordsOnPage: number): UserPaginationResponseBuilder {
+
+    public totalUsersOnPage(numberOfRecordsOnPage: number): UserPaginationResponseBuilder {
         this._userPaginationDetailsResponse.numberOfRecordsOnPage = numberOfRecordsOnPage;
         return this;
     }
