@@ -13,7 +13,7 @@ export class User {
     @UpdateDateColumn({ name: "updated_date", nullable: true })
     private _updatedDate: Date;
 
-    @Column({ type: "varchar", length: 255, unique: true, name: "email", nullable: false })
+    @Column({ type: "varchar", length: 255, name: "email", nullable: false })
     private _email: string;
 
     @Column({ name: "full_name", nullable: false })

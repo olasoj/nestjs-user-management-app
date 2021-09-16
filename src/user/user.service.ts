@@ -2,7 +2,7 @@ import { UserCreationRequestBuilder } from './model/builder/request/user.creatio
 import { UserBuilder } from './model/builder/entity/user.builder';
 import { User } from './model/entity/user.entity';
 import { Repository, SelectQueryBuilder } from "typeorm";
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { UserCreationRequest } from "./model/request/user.creation.request";
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserPaginateRequest } from './model/request/pagination/user.pagination.request'
@@ -13,6 +13,7 @@ import { UserFilterRequest } from './model/request/pagination/user.filter reques
 import { UserPaginationResponseBuilder } from './model/builder/response/pagination/user.pagination.details.response.builder'
 import { UserResponseBuilder } from './model/builder/response/user.response.builder';
 import { UserPaginationDetailsResponse } from './model/response/pagination/user.pagination.details.response';
+import { UserResponse } from './model/response/user.response';
 
 
 @Injectable()
@@ -20,69 +21,49 @@ export class UserService {
 
     constructor(@InjectRepository(User) private userRepository: Repository<User>) { }
 
-    async getPaginatedUsers(userPaginateRequest: UserPaginateRequest): Promise<UserPaginationDetailsResponse> {
+    async getPaginatedUsersDetails(userPaginateRequest: UserPaginateRequest): Promise<UserPaginationDetailsResponse> {
         const queryBuilder = this.getQueryBuilder();
         const { userPageRequest, userFilterRequest } = this.resolveUserPaginationRequest(userPaginateRequest);
 
         this.filterUserList(queryBuilder, userFilterRequest);
         this.paginateUserResult(queryBuilder, userPageRequest);
-        console.log(userPageRequest)
 
         const [users, totalUsers] = await queryBuilder.getManyAndCount();
-        const userResponseDTO = this.getUserResponse(users);
-
-        return new UserPaginationResponseBuilder()
-            .totalNumberOfUser(totalUsers)
-            .totalUsersOnPage(userResponseDTO.length)
-            .pageNumber(userPageRequest.pageNumber)
-            .totalPages(Math.ceil(totalUsers / userPageRequest.pageSize))
-            .pageSize(userPageRequest.pageSize)
-            .users(userResponseDTO)
-            .build()
+        return this.getUsersPaginationDetailsResponse(totalUsers, this.getUsersResponse(users), userPageRequest)
     }
 
-    async getUserDistinctValue(): Promise<any> {
+    async getDistinctUserFieldValue(): Promise<any> {
         const queryBuilder = this.getQueryBuilder();
-
         const distinctInterests = await this.getDistinctInterest(queryBuilder)
         const distinctWorkCategories = await this.getDistinctWorkCategory(queryBuilder)
-
         return { distinctWorkCategories: [...(distinctWorkCategories)], distinctInterests: [...distinctInterests] };
     }
 
-    async getUser(id: string) {
-        const user = await this.userRepository.findOne({ where: { id: id } });
-        return user;
-    }
-
-
     async initializeUserTable() {
-        for (const userCreationRequest of this.getInitUserData())
-            this.createUser(userCreationRequest)
+        for (const userCreationRequest of this.getInitUserData()) this.createUser(userCreationRequest)
     }
 
     async createUser(userCreationRequest: UserCreationRequest) {
         const newUser = this.getNewUserFromUserCreationRequest(userCreationRequest)
         const user = this.userRepository.create(newUser);
         await this.userRepository.save(user);
-        return user;
-    }
-
-
-    async updateUser(id: string, product: User) {
-        const user = await this.userRepository.update({ id }, product);
-        return user;
+        return "User created";
     }
 
     async deleteUser(id: string) {
-        const user = await this.userRepository.delete({ id });
-        return user;
+        await this.getUser(id);
+        await this.userRepository.delete(id);
+        return "User deleted";
     }
 
+    async getUser(id: string) {
+        const user = await this.userRepository.findOne(id);
+        if (!user) throw new HttpException("User not found", 404);
+        return this.getUserResponse(user);
+    }
 
     private filterUserList(queryBuilder: SelectQueryBuilder<User>, userFilterRequest: UserFilterRequest) {
         const { workCategory, interest } = userFilterRequest;
-        console.log(workCategory)
         if (workCategory) queryBuilder.where("user._workCategory = :workCategory", { workCategory });
         if (interest) queryBuilder.andWhere("user._interest = :interest", { interest });
     }
@@ -98,19 +79,22 @@ export class UserService {
             ? new UserPaginateRequest() : userPaginateRequest;
     }
 
-    async getAllUsers() {
-        return this.userRepository.find();
-    }
-
-    async userTableIsEmpty() {
-        if ((await this.getAllUsers()).length == 0) return true;
-        return false;
-    }
-
-
     private getQueryBuilder() {
         return this.userRepository.createQueryBuilder("user");
     }
+
+
+    private getUsersPaginationDetailsResponse(totalUsers: number, userResponseDTO: UserResponse[], userPageRequest: UserPageRequest): UserPaginationDetailsResponse | PromiseLike<UserPaginationDetailsResponse> {
+        return new UserPaginationResponseBuilder()
+            .totalNumberOfUser(totalUsers)
+            .totalUsersOnPage(userResponseDTO.length)
+            .pageNumber(userPageRequest.pageNumber)
+            .totalPages(Math.ceil(totalUsers / userPageRequest.pageSize))
+            .pageSize(userPageRequest.pageSize)
+            .users(userResponseDTO)
+            .build();
+    }
+
 
     private getNewUserFromUserCreationRequest(userCreationRequest: UserCreationRequest): User {
         return new UserBuilder()
@@ -136,8 +120,12 @@ export class UserService {
         );
     }
 
-    private getUserResponse(users: User[]) {
-        return users.map(user => new UserResponseBuilder()
+    private getUsersResponse(users: User[]) {
+        return users.map(user => this.getUserResponse(user));
+    }
+
+    private getUserResponse(user: User): UserResponse {
+        return new UserResponseBuilder()
             .id(user.id)
             .email(user.email)
             .fullName(user.fullName)
@@ -145,7 +133,7 @@ export class UserService {
             .username(user.username)
             .workCategory(user.workCategory)
             .yearsOfExperience(user.yearsOfExperience)
-            .build());
+            .build();
     }
 
     private async getDistinctWorkCategory(queryBuilder: SelectQueryBuilder<User>) {
