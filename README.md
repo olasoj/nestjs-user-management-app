@@ -1,73 +1,106 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![Logo](https://i.postimg.cc/xjB3ch1T/p-Tqr-Ex-Xac.jpg)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+    
+# User Filter Application
 
-## Description
+The User Filter Application aims at viewing users stored in the databae whilst filtering through users' interests and work categories.
+The application was built with nestJS (backend) and reactJS (frontend).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Project Link
 
-## Installation
+
+[user-filter-nest-app](https://user-management-nest-backend.herokuapp.com/api)
+
+[user-filter-react-app](https://users-filter-react-app.herokuapp.com/users)
+
+## Screenshots
+
+![App Screenshot](https://i.postimg.cc/3NjNrkwG/Screenshot-2021-09-18-18-44-42.png)
+
+  
+## Getting Started
+
+**user-filer-nest-app**
+
+- **Clone the project**
 
 ```bash
-$ npm install
+   git clone -b main https://github.com/olasoj/user-filer-nest-app.git
 ```
 
-## Running the app
+- **Define the required environment variables**
+
+| S/N | Environment Variable | Description                                                      |
+| --- | -------------------- | ---------------------------------------------------------------- |
+| 1   | DB\_CONNECTION       | Database connection: postgres                                    |
+| 2   | DB\_HOST             | Database host                                                    |
+| 3   | DB\_USERNAME         | Database username                                                |
+| 4   | DB\_PASSWORD         | Database password                                                |
+| 5   | DB\_NAME             | Database name                                                    |
+| 6   | DB\_PORT:            | Database port                                                    |
+| 7   | DB\_SYNCHRONIZE      | Database synchronization: true                                   |
+| 8   | DB\_LOGGING          | Database logging: true                                           |
+| 9   | DB\_ENTITIES         | Value: "./src/\*\*/model/entity/\*.js, ./dist/\*\*/entity/\*.js" |
+
+- **Go to the project directory**
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+  cd user-filer-nest-app
 ```
 
-## Test
+- **Start the user-filer-nest-app**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+    npm install
+    npm run start:dev
 ```
 
-## Support
+**user-filer-react-app**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **Clone the project**
 
-## Stay in touch
+```bash
+   git clone -b master https://github.com/olasoj/user-filter-react-app.git
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Go to the project directory**
 
-## License
+```bash
+    cd user-filter-react-app 
+ ```
 
-Nest is [MIT licensed](LICENSE).
+- **Start the user-filer-react-app**
+
+```bash
+    npm install
+    npm run start
+```
+
+## Features
+
+- Pagination
+- Filtering
+- User removal
+- User creation
+
+  
+## Documentation
+
+[Documentation](https://rosenic-q3-api-doc.surge.sh/)
+
+  
+## Authors
+
+- [@olasoj](https://www.github.com/olasoj)
+
+  
+## Tech Stack
+
+**Client:** React, BootStrap
+
+**Server:** NestJS
+
+**Database**: postgresql
+
+  
