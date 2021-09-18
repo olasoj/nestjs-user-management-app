@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "main": "dist/main.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.22.5"
   },
   "scripts": {
     "deploy": "gcloud app deploy --quiet",
@@ -33,7 +33,9 @@
     "@nestjs/typeorm": "^8.0.2",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "compression": "^1.7.4",
     "dotenv": "^8.6.0",
+    "helmet": "^4.6.0",
     "joi": "^17.4.2",
     "mysql": "^2.18.1",
     "nestjs-easyconfig": "^2.4.2",

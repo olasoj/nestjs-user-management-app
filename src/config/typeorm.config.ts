@@ -14,7 +14,8 @@ export default class TypeOrmConfig {
             entities: [configService.get('DB_ENTITIES')], //[__dirname + '/../**/*.entity{.ts,.js}'],
             synchronize: configService.get('DB_SYNCHRONIZE'),
             logging: configService.get('DB_LOGGING'),
-            autoLoadEntities: true
+            autoLoadEntities: true,
+            ssl: true
         };
     }
 }
