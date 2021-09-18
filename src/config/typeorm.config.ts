@@ -15,7 +15,12 @@ export default class TypeOrmConfig {
             synchronize: configService.get('DB_SYNCHRONIZE'),
             logging: configService.get('DB_LOGGING'),
             autoLoadEntities: true,
-            ssl: true
+            ssl: true,
+            extra: {
+                ssl: {
+                    rejectUnauthorized: false,
+                }
+            }
         };
     }
 }
